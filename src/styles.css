@@ -28,7 +28,7 @@
 
   --gutter: clamp(16px, 4vw, 56px);
   --max: 1440px;
-  --header-h: 76px;
+  --header-h: 96px;
   --radius: 0; /* sharp, to match the logo's geometric square */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -320,24 +320,29 @@ em {
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
+/* brightened + violet glow so the mark's indigo end holds up over dark footage */
 .logo img {
-  width: 46px;
+  width: 76px;
   height: auto;
+  filter: brightness(1.45) saturate(1.25) drop-shadow(0 0 10px rgba(155, 124, 245, 0.45));
 }
 .logo__word {
   display: flex;
   flex-direction: column;
-  font-size: 13px;
-  line-height: 1.05;
+  font-size: 16px;
+  line-height: 1.1;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 .logo__word b {
-  color: var(--accent);
   font-weight: 800;
+  background: var(--brand-gradient-ink);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* ==========================================================================
@@ -385,8 +390,8 @@ em {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 10px 14px;
-  font-size: 15px;
+  padding: 12px 16px;
+  font-size: 16.5px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.78);
   border-radius: var(--radius);
@@ -398,7 +403,7 @@ em {
   background: rgba(255, 255, 255, 0.07);
 }
 .nav-link__num {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--brand-on-ink);
   transform: translateY(-5px);
@@ -572,7 +577,12 @@ em {
 .header__actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+}
+.header .pill {
+  height: 48px;
+  padding: 0 20px;
+  font-size: 15px;
 }
 
 /* offices popover */
@@ -631,31 +641,31 @@ em {
 .burger {
   display: none;
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: var(--radius);
   border: 1px solid rgba(255, 255, 255, 0.25);
 }
 .burger span {
   position: absolute;
-  left: 13px;
-  right: 13px;
+  left: 14px;
+  right: 14px;
   height: 1.6px;
   background: currentColor;
   transition: transform 0.4s var(--ease), top 0.4s var(--ease);
 }
 .burger span:first-child {
-  top: 17px;
+  top: 19px;
 }
 .burger span:last-child {
-  top: 25px;
+  top: 27px;
 }
 .burger.is-open span:first-child {
-  top: 21px;
+  top: 23px;
   transform: rotate(45deg);
 }
 .burger.is-open span:last-child {
-  top: 21px;
+  top: 23px;
   transform: rotate(-45deg);
 }
 
@@ -1888,16 +1898,16 @@ em {
 
 @media (max-width: 640px) {
   :root {
-    --header-h: 64px;
+    --header-h: 76px;
   }
   .header__cta {
     display: none;
   }
   .logo img {
-    width: 38px;
+    width: 58px;
   }
   .logo__word {
-    font-size: 11px;
+    font-size: 13px;
   }
   .intro__facts {
     grid-template-columns: 1fr;

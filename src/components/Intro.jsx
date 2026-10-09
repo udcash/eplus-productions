@@ -43,7 +43,7 @@ export default function Intro() {
         </div>
       </div>
 
-      <div ref={mediaRef} className="intro__media" style={{ clipPath: `inset(0 ${inset}% round ${8 + inset}px)` }}>
+      <div ref={mediaRef} className="intro__media" style={{ clipPath: `inset(0 ${inset}%)` }}>
         <video src="projects/about.mp4" poster="timeline/dsc_0261_2.webp" autoPlay muted loop playsInline preload="metadata" />
         <span className="intro__caption">Behind the curtain — Las Vegas</span>
       </div>

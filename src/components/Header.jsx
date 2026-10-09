@@ -6,7 +6,7 @@ import { Arrow, Chevron, Globe, ICONS, Play } from './Icons.jsx';
 export function Logo({ compact = false }) {
   return (
     <span className={`logo ${compact ? 'logo--compact' : ''}`}>
-      <img src="logo.png" alt="" width="46" height="38" />
+      <img src="logo-mark.png" alt="" width="46" height="28" />
       <span className="logo__word">
         Entertainment<b>Plus</b>
       </span>

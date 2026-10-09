@@ -37,7 +37,7 @@ export const SERVICES = [
   {
     id: 'directors',
     title: 'Directors',
-    tint: '#ff8a1f',
+    tint: '#ee844a',
     image: 'projects/first.jpeg',
     short: 'Concept to final frame',
     description:

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -oE 'swiper[^\"]{0,40}' www.lesgmstudios.com.html)",
+      "Bash(python3 -I - www.appsignal.com.html)",
+      "Bash(grep -oE 'stroopwafel[^\"]{0,30}' -i www.appsignal.com.html)",
+      "Bash(npx vite *)",
+      "Bash(pkill -f \"vite preview --port 4173\")"
+    ]
+  }
+}

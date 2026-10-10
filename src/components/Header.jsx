@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { CONTACT, FORMATS, NAV, SERVICES } from '../data.js';
-import { lockScroll, scrollToHash } from '../hooks.js';
+import { inDeckRange, lockScroll, scrollToHash } from '../hooks.js';
 import { Arrow, Chevron, Globe, ICONS, Play } from './Icons.jsx';
 
 export function Logo({ compact = false }) {
@@ -28,6 +28,12 @@ export default function Header({ onReel }) {
     const onScroll = () => {
       const y = window.scrollY;
       setScrolled(y > 40);
+      // while the team cards are spinning (touch), keep the header shown and still
+      if (inDeckRange(y)) {
+        setHidden(false);
+        lastY = y;
+        return;
+      }
       if (Math.abs(y - lastY) > 6) {
         setHidden(y > lastY && y > 480);
         lastY = y;

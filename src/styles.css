@@ -745,6 +745,7 @@ em {
    ========================================================================== */
 .hero {
   position: relative;
+  min-height: 100vh;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -1328,6 +1329,7 @@ em {
 .team__sticky {
   position: sticky;
   top: 0;
+  height: 100vh;
   height: 100svh;
   display: flex;
   flex-direction: column;
@@ -1354,19 +1356,21 @@ em {
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  touch-action: pan-y;
   perspective: 1800px;
   perspective-origin: 50% 30%;
 }
 .fan__stage {
   position: absolute;
   left: 50%;
-  top: clamp(16px, 4vh, 48px);
+  top: var(--stage-top, clamp(16px, 4vh, 48px));
   width: 0;
   height: 0;
   transform-style: preserve-3d;
 }
 .fan-card {
-  --w: clamp(170px, 19vw, 300px);
+  --w: var(--card-w, clamp(170px, 19vw, 300px)); /* --card-w is measured in Team.jsx */
+  container-type: inline-size;
   position: absolute;
   left: calc(var(--w) / -2);
   top: 0;
@@ -1385,10 +1389,16 @@ em {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: var(--radius);
-  border: 1px solid transparent;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(255, 255, 255, 0.65) 100%) border-box;
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.25);
+  /* team cards are softened (unlike the site's sharp corners) so the rotating deck reads as photo cards */
+  border-radius: 14px;
+  border-radius: clamp(10px, 5cqi, 16px);
+  background: var(--paper-2);
+  box-shadow:
+    0 1px 2px rgba(12, 12, 14, 0.06),
+    0 12px 28px -14px rgba(12, 12, 14, 0.28);
+  /* keeps tilted edges anti-aliased instead of stair-stepped */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(0);
   transition: transform 0.5s var(--ease), box-shadow 0.5s;
   cursor: pointer;
@@ -1397,7 +1407,9 @@ em {
 .fan-card__inner:hover,
 .fan-card__inner:focus-visible {
   transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-22px) scale(1.04);
-  box-shadow: 0 40px 60px -10px rgba(0, 0, 0, 0.55);
+  box-shadow:
+    0 2px 4px rgba(12, 12, 14, 0.06),
+    0 26px 44px -18px rgba(12, 12, 14, 0.34);
   transition: transform 0.25s ease-out, box-shadow 0.5s;
 }
 .fan-card__inner img {
@@ -1406,14 +1418,14 @@ em {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: var(--radius);
+  border-radius: inherit;
   user-select: none;
   pointer-events: none;
 }
 .fan-card__glare {
   position: absolute;
   inset: 0;
-  border-radius: var(--radius);
+  border-radius: inherit;
   background: radial-gradient(circle at var(--gx) var(--gy), rgba(255, 255, 255, 0.35), transparent 55%);
   opacity: 0;
   mix-blend-mode: overlay;
@@ -1423,15 +1435,23 @@ em {
 .fan-card__inner:hover .fan-card__glare {
   opacity: 1;
 }
+.fan-card__inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+  pointer-events: none;
+}
 .fan-card__info {
   position: absolute;
   inset: auto 0 0 0;
   display: grid;
   gap: 2px;
-  padding: 48px 16px 16px;
+  padding: 44px 16px 16px;
+  padding: 18cqi 7cqi 7cqi;
   color: var(--white);
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
-  border-radius: var(--radius);
   transform: translateY(30%);
   opacity: 0;
   transition: transform 0.5s var(--ease), opacity 0.4s;
@@ -1443,17 +1463,20 @@ em {
 }
 .fan-card__info strong {
   font-size: 18px;
+  font-size: clamp(16px, 7.5cqi, 24px);
   letter-spacing: -0.03em;
   line-height: 1.1;
 }
 .fan-card__info span {
-  font-size: 13px;
+  font-size: 14px;
+  font-size: clamp(13px, 5.2cqi, 16px);
   opacity: 0.8;
   line-height: 1.3;
 }
 .fan-card__info em {
   margin-top: 4px;
   font-size: 15px;
+  font-size: clamp(14px, 6cqi, 19px);
   color: var(--brand-on-ink);
 }
 .team__now {
@@ -1468,6 +1491,8 @@ em {
   margin-top: auto;
 }
 .team__count {
+  flex: none;
+  white-space: nowrap;
   font-size: 28px;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -1867,7 +1892,14 @@ em {
   .intro__row,
   .services__grid,
   .faq__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .service__head {
+    grid-template-columns: 32px minmax(0, 1fr) auto;
+    gap: 12px;
+  }
+  .service__title {
+    font-size: clamp(22px, 6.6vw, 40px);
   }
   .services__aside,
   .faq__aside {
@@ -1925,24 +1957,32 @@ em {
   .work-card__tags {
     display: none;
   }
-  .team {
-    height: 300vh;
-  }
   .fan-card {
-    --w: min(56vw, 240px);
+    --w: var(--card-w, min(56vw, 240px));
   }
   .team__now {
-    flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    padding-block: 12px 16px;
+  }
+  .team__count {
+    font-size: 24px;
   }
   .team__name {
-    text-align: left;
+    font-size: 14px;
+    line-height: 1.35;
   }
   .faq__item button {
     grid-template-columns: 32px 1fr 28px;
   }
   .faq__a p {
     padding: 0 0 24px 44px;
+  }
+}
+
+/* team deck on phones: a longer pinned scroll (one swipe = one card is handled in Team.jsx) */
+@media (max-width: 759px) {
+  .team {
+    height: 560vh;
   }
 }
 
@@ -1967,12 +2007,5 @@ em {
   [data-reveal] {
     opacity: 1;
     transform: none;
-  }
-  .team {
-    height: auto;
-  }
-  .team__sticky {
-    position: relative;
-    height: 100svh;
   }
 }

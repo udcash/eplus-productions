@@ -1,21 +1,27 @@
 import { useRef } from 'react';
-import { scrollToHash, useScrollProgress } from '../hooks.js';
+import { prefersReducedMotion, scrollToHash, useScrollProgress } from '../hooks.js';
 import { Arrow, Play } from './Icons.jsx';
 
 const PLACES = ['Los Angeles', 'China', 'The White House', 'Las Vegas', 'Arena Tours', 'Presidential Galas', 'Broadcast'];
 
 export default function Hero({ onReel }) {
   const ref = useRef(null);
-  const p = useScrollProgress(ref, { start: 'top top', end: 'bottom top' });
+  const media = useRef(null);
+  const content = useRef(null);
+  useScrollProgress(ref, { start: 'top top', end: 'bottom top' }, (p) => {
+    // parallax is the classic motion-sickness trigger, so it is the one effect Reduce Motion drops
+    if (!prefersReducedMotion()) media.current.style.transform = `translate3d(0, ${p * 18}%, 0) scale(${1 + p * 0.08})`;
+    content.current.style.opacity = String(1 - p * 1.4);
+  });
 
   return (
     <section id="top" ref={ref} className="hero" aria-label="Introduction">
-      <div className="hero__media" style={{ transform: `translate3d(0, ${p * 18}%, 0) scale(${1 + p * 0.08})` }}>
+      <div ref={media} className="hero__media">
         <video src="projects/reel.mp4" poster="timeline/img_0809.webp" autoPlay muted loop playsInline preload="auto" />
       </div>
       <div className="hero__shade" />
 
-      <div className="hero__content container" style={{ opacity: 1 - p * 1.4 }}>
+      <div ref={content} className="hero__content container">
         <p className="hero__eyebrow">
           <span className="dot" /> Live entertainment · Since day one in Los Angeles
         </p>

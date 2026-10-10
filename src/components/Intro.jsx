@@ -7,10 +7,21 @@ const STATEMENT =
 export default function Intro() {
   const textRef = useRef(null);
   const mediaRef = useRef(null);
-  const t = useScrollProgress(textRef, { start: 'top bottom', end: 'bottom center' });
-  const m = useScrollProgress(mediaRef, { start: 'top bottom', end: 'center center' });
+  const wordEls = useRef([]);
+  const lit = useRef(0);
   const words = STATEMENT.split(' ');
-  const inset = (1 - m) * 14;
+
+  // light words up to the scroll position, touching only the words whose state changed
+  useScrollProgress(textRef, { start: 'top bottom', end: 'bottom center' }, (t) => {
+    const count = Math.min(words.length, Math.max(0, Math.ceil(t * words.length * 1.15)));
+    for (let i = Math.min(count, lit.current); i < Math.max(count, lit.current); i++) {
+      wordEls.current[i]?.classList.toggle('is-on', i < count);
+    }
+    lit.current = count;
+  });
+  useScrollProgress(mediaRef, { start: 'top bottom', end: 'center center' }, (m) => {
+    mediaRef.current.style.clipPath = `inset(0 ${(1 - m) * 14}%)`;
+  });
 
   return (
     <section className="intro section section--paper" aria-labelledby="intro-title">
@@ -20,14 +31,11 @@ export default function Intro() {
           <h2 id="intro-title" className="sr-only">Who we are</h2>
         </div>
         <p ref={textRef} className="intro__statement">
-          {words.map((w, i) => {
-            const on = t * words.length * 1.15 > i;
-            return (
-              <span key={i} className={on ? 'is-on' : ''}>
-                {w}{' '}
-              </span>
-            );
-          })}
+          {words.map((w, i) => (
+            <span key={i} ref={(el) => (wordEls.current[i] = el)}>
+              {w}{' '}
+            </span>
+          ))}
         </p>
 
         <div className="intro__row">
@@ -43,7 +51,7 @@ export default function Intro() {
         </div>
       </div>
 
-      <div ref={mediaRef} className="intro__media" style={{ clipPath: `inset(0 ${inset}%)` }}>
+      <div ref={mediaRef} className="intro__media" style={{ clipPath: 'inset(0 14%)' }}>
         <video src="projects/about.mp4" poster="timeline/dsc_0261_2.webp" autoPlay muted loop playsInline preload="metadata" />
         <span className="intro__caption">Behind the curtain — Las Vegas</span>
       </div>

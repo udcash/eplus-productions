@@ -1378,7 +1378,11 @@ em {
   aspect-ratio: 360 / 560;
   transform-origin: 50% 50%;
   will-change: transform;
-  transform-style: preserve-3d;
+  /* flat on purpose: the hover tilt on .fan-card__inner is drawn onto the card's own plane.
+     With preserve-3d here the tilted card shared the fan's 3D space and sliced through the
+     cards stacked behind it (half of one photo, half of another). The cards themselves still
+     sit in the stage's 3D space, so the fan layout is unchanged. */
+  transform-style: flat;
 }
 .fan-card__inner {
   --rx: 0deg;
@@ -1478,6 +1482,38 @@ em {
   font-size: 15px;
   font-size: clamp(14px, 6cqi, 19px);
   color: var(--brand-on-ink);
+}
+/* desktop keeps the original card look (sharp corners, gradient edge, deep shadow);
+   the softened photo-card style above applies to phones and tablets only */
+@media (min-width: 1100px) {
+  .fan-card__inner {
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(255, 255, 255, 0.65) 100%) border-box;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.25);
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
+  }
+  .fan-card__inner:hover,
+  .fan-card__inner:focus-visible {
+    box-shadow: 0 40px 60px -10px rgba(0, 0, 0, 0.55);
+  }
+  .fan-card__inner::after {
+    content: none;
+  }
+  .fan-card__info {
+    padding: 48px 16px 16px;
+    border-radius: var(--radius);
+  }
+  .fan-card__info strong {
+    font-size: 18px;
+  }
+  .fan-card__info span {
+    font-size: 13px;
+  }
+  .fan-card__info em {
+    font-size: 15px;
+  }
 }
 .team__now {
   position: relative;
